@@ -1,0 +1,33 @@
+{
+  "name": "git-commit-ai",
+  "version": "1.0.0",
+  "description": "Git commit AI",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmed-alzahrani/git-commit-ai.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ahmed-alzahrani/git-commit-ai/issues"
+  },
+  "homepage": "https://github.com/ahmed-alzahrani/git-commit-ai#readme",
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@google-cloud/aiplatform": "^6.0.0",
+    "commander": "^14.0.2",
+    "dotenv": "^17.2.3"
+  }
+}
