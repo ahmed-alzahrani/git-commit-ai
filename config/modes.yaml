@@ -1,0 +1,70 @@
+modes:
+  default:
+    name: "Default"
+    description: "Standard commit messages"
+    prompt: |
+      Generate a concise commit message for the following git diff.
+      Follow conventional commit format when appropriate.
+      
+      Diff:
+      {{diff}}
+
+  conventional:
+    name: "Conventional Commits"
+    description: "Strict conventional commits format"
+    prompt: |
+      Generate a commit message following Conventional Commits specification.
+      Format: <type>(<scope>): <subject>
+      Types: feat, fix, docs, style, refactor, test, chore
+      
+      Diff:
+      {{diff}}
+
+  emoji:
+    name: "Emoji Style"
+    description: "Commit messages with emojis"
+    prompt: |
+      Generate a commit message with relevant emoji prefix.
+      Examples: 🚀 for features, 🐛 for bugs, ✨ for improvements, 🔧 for fixes, 📝 for docs
+      
+      Diff:
+      {{diff}}
+
+  detailed:
+    name: "Detailed"
+    description: "Longer, more descriptive messages"
+    prompt: |
+      Generate a detailed commit message explaining what changed and why.
+      Include context and reasoning behind the changes.
+      
+      Diff:
+      {{diff}}
+
+  goofy:
+    name: "Goofy"
+    description: "Fun, casual commit messages"
+    prompt: |
+      Generate a fun, casual commit message. Be creative and lighthearted.
+      
+      Diff:
+      {{diff}}
+
+  japanese:
+    name: "Japanese"
+    description: "Commit messages in Japanese"
+    prompt: |
+      Generate a concise commit message in Japanese for the following git diff.
+      Use appropriate Japanese commit message conventions.
+      
+      Diff:
+      {{diff}}
+
+  rhymes:
+    name: "Rhymes"
+    description: "Commit messages that rhyme"
+    prompt: |
+      Generate a commit message that rhymes. Be creative and fun.
+      
+      Diff:
+      {{diff}}
+
