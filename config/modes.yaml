@@ -3,7 +3,7 @@ modes:
     name: "Default"
     description: "Standard commit messages"
     prompt: |
-      Generate a concise commit message for the following git diff.
+      Generate a single concise commit message for the following git diff.
       Follow conventional commit format when appropriate.
       
       Diff:
@@ -13,7 +13,7 @@ modes:
     name: "Conventional Commits"
     description: "Strict conventional commits format"
     prompt: |
-      Generate a commit message following Conventional Commits specification.
+      Generate a single commit message following Conventional Commits specification.
       Format: <type>(<scope>): <subject>
       Types: feat, fix, docs, style, refactor, test, chore
       
@@ -24,7 +24,7 @@ modes:
     name: "Emoji Style"
     description: "Commit messages with emojis"
     prompt: |
-      Generate a commit message with relevant emoji prefix.
+      Generate a single commit message with relevant emoji prefix.
       Examples: 🚀 for features, 🐛 for bugs, ✨ for improvements, 🔧 for fixes, 📝 for docs
       
       Diff:
@@ -34,7 +34,7 @@ modes:
     name: "Detailed"
     description: "Longer, more descriptive messages"
     prompt: |
-      Generate a detailed commit message explaining what changed and why.
+      Generate a single detailed commit message explaining what changed and why.
       Include context and reasoning behind the changes.
       
       Diff:
@@ -44,7 +44,7 @@ modes:
     name: "Goofy"
     description: "Fun, casual commit messages"
     prompt: |
-      Generate a fun, casual commit message. Be creative and lighthearted.
+      Generate a single fun, casual commit message. Be creative and lighthearted.
       
       Diff:
       {{diff}}
@@ -53,7 +53,7 @@ modes:
     name: "Japanese"
     description: "Commit messages in Japanese"
     prompt: |
-      Generate a concise commit message in Japanese for the following git diff.
+      Generate a single concise commit message in Japanese for the following git diff.
       Use appropriate Japanese commit message conventions.
       
       Diff:
@@ -63,8 +63,25 @@ modes:
     name: "Rhymes"
     description: "Commit messages that rhyme"
     prompt: |
-      Generate a commit message that rhymes. Be creative and fun.
+      Generate a single commit message that rhymes. Be creative and fun.
       
       Diff:
       {{diff}}
 
+  yoda:
+    name: "Yoda"
+    description: "Commit messages in Yoda speak"
+    prompt: |
+      Generate a single commit message in Yoda's speaking style. Rearrange the sentence structure to match Yoda's speech pattern (e.g., "Fixed, the bug has been" or "A new feature, we have added").
+      
+      Diff:
+      {{diff}}
+
+  questions:
+    name: "Questions"
+    description: "Commit messages posed as questions"
+    prompt: |
+      Generate a single commit message that poses the change as a question or series of questions. For example: "What if we fixed the bug? What if we added this feature?"
+      
+      Diff:
+      {{diff}}
