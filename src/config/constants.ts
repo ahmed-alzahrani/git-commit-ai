@@ -1,9 +1,12 @@
 import * as path from 'path';
 import * as fs from 'fs';
+import { PackageJson } from '../types';
 
 // Load version from package.json
 const packageJsonPath = path.join(__dirname, '../../package.json');
-const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+const packageJson = JSON.parse(
+  fs.readFileSync(packageJsonPath, 'utf8')
+) as PackageJson;
 
 // Paths
 export const PATHS = {

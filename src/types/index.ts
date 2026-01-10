@@ -11,3 +11,14 @@ export interface ModesConfig {
 export interface CliOptions {
   mode: string;
 }
+
+export interface ServiceAccountCredentials {
+  project_id: string;
+  private_key: string;
+  client_email: string;
+}
+
+export interface PackageJson {
+  name: string;
+  version: string;
+}

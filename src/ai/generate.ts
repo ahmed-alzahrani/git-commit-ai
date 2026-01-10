@@ -1,10 +1,11 @@
 import * as fs from 'fs';
 import { VertexAI } from '@google-cloud/vertexai';
 import { PATHS, AI_CONFIG, ERROR_MESSAGES } from '../config/constants';
+import { ServiceAccountCredentials } from '../types';
 
 const credentials = JSON.parse(
   fs.readFileSync(PATHS.SERVICE_ACCOUNT_KEY, 'utf8')
-);
+) as ServiceAccountCredentials;
 
 const vertexAI = new VertexAI({
   project: credentials.project_id,
