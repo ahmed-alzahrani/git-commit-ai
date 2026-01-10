@@ -1,29 +1,29 @@
 {
-  "name": "git-commit-ai",
+  "name": "committer",
   "version": "1.0.0",
-  "description": "Git commit AI",
+  "description": "Git commit message auto generation tool",
   "main": "index.js",
   "bin": {
-    "gca": "./dist/index.js",
-    "git-commit-ai": "./dist/index.js"
+    "committer": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "watch": "tsc --watch"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmed-alzahrani/git-commit-ai.git"
+    "url": "git+https://github.com/ahmed-alzahrani/committer.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/ahmed-alzahrani/git-commit-ai/issues"
+    "url": "https://github.com/ahmed-alzahrani/committer/issues"
   },
-  "homepage": "https://github.com/ahmed-alzahrani/git-commit-ai#readme",
+  "homepage": "https://github.com/ahmed-alzahrani/committer#readme",
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^25.0.3",
@@ -31,9 +31,12 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@google-cloud/aiplatform": "^6.0.0",
+    "@google-cloud/vertexai": "^1.10.0",
     "commander": "^14.0.2",
     "dotenv": "^17.2.3",
-    "js-yaml": "^4.1.1"
+    "inquirer": "^13.1.0",
+    "js-yaml": "^4.1.1",
+    "ora": "^9.0.0",
+    "simple-git": "^3.30.0"
   }
 }
