@@ -27,7 +27,7 @@ async function run(options: CliOptions) {
     let diff: string;
     try {
         diff = await getDiff();
-    } catch (error) {
+    } catch {
         console.error(ERROR_MESSAGES.NO_STAGED_CHANGES);
         return;
     }

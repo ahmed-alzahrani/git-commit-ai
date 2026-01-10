@@ -1,4 +1,9 @@
 import * as path from 'path';
+import * as fs from 'fs';
+
+// Load version from package.json
+const packageJsonPath = path.join(__dirname, '../../package.json');
+const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 
 // Paths
 export const PATHS = {
@@ -17,6 +22,7 @@ export const AI_CONFIG = {
 // Git-related
 export const GIT = {
   DIFF_FLAGS: ['--cached'] as const,
+  REVPARSE_FLAGS: ['--is-inside-work-tree'] as const,
 } as const;
 
 // Spinner Messages
@@ -49,7 +55,7 @@ export const CLI_MESSAGES = {
 export const APP_INFO = {
   NAME: 'committer',
   DESCRIPTION: 'AI powered git commit message generator',
-  VERSION: '1.0.0',
+  VERSION: packageJson.version,
   DEFAULT_MODE: 'default',
 } as const;
 

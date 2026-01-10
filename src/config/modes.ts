@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import { ModesConfig, Mode } from '../types';
-import { PATHS, PLACEHOLDERS, ERROR_MESSAGES } from './constants';
+import { PATHS, ERROR_MESSAGES } from './constants';
 
 let cachedConfig: ModesConfig | null = null;
 

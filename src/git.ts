@@ -5,7 +5,7 @@ const git = simpleGit();
 
 export async function checkRepo(): Promise<boolean> {
     try {
-        await git.revparse(['--is-inside-work-tree']);
+        await git.revparse([...GIT.REVPARSE_FLAGS]);
         return true;
     } catch (error) {
         return false;
