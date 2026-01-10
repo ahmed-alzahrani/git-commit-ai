@@ -46,6 +46,8 @@ export const ERROR_MESSAGES = {
   MODE_NOT_FOUND: (modeId: string) =>
     `Mode "${modeId}" not found in configuration`,
   NO_COMMIT_MESSAGE_GENERATED: 'No commit message generated from AI response',
+  FAILED_TO_GENERATE_COMMIT_MESSAGE: 'Failed to generate commit message',
+  FAILED_TO_COMMIT: 'Failed to commit',
   FAILED_TO_LOAD_MODES_CONFIG: (message: string) =>
     `Failed to load modes config: ${message}`,
   FAILED_TO_LOAD_MODES_CONFIG_UNKNOWN:

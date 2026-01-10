@@ -39,7 +39,7 @@ async function generateCommitMessageWithSpinner(
     spinner.succeed(SPINNER_MESSAGES.SUCCESS_GENERATED);
     return commitMessage;
   } catch (error) {
-    spinner.fail('Failed to generate commit message');
+    spinner.fail(ERROR_MESSAGES.FAILED_TO_GENERATE_COMMIT_MESSAGE);
     throw error;
   }
 }
@@ -62,30 +62,39 @@ async function executeCommitWithSpinner(message: string): Promise<void> {
     await commit(message);
     commitSpinner.succeed(SPINNER_MESSAGES.SUCCESS_COMMITTED);
   } catch (error) {
-    commitSpinner.fail('Failed to commit');
+    commitSpinner.fail(ERROR_MESSAGES.FAILED_TO_COMMIT);
     throw error;
   }
 }
 
 async function run(options: CliOptions) {
-  console.log(CLI_MESSAGES.MODE_SELECTED(options.mode));
+  try {
+    console.log(CLI_MESSAGES.MODE_SELECTED(options.mode));
 
-  const diff = await validateGitState();
-  if (!diff) {
-    return;
+    const diff = await validateGitState();
+    if (!diff) {
+      return;
+    }
+
+    const prompt = getPromptForMode(options.mode, diff);
+    const commitMessage = await generateCommitMessageWithSpinner(prompt);
+    console.log(commitMessage);
+
+    const confirmed = await confirmWithUser();
+    if (!confirmed) {
+      console.log(ERROR_MESSAGES.COMMIT_MESSAGE_NOT_COMMITTED);
+      return;
+    }
+
+    await executeCommitWithSpinner(commitMessage);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(`Error: ${error.message}`);
+    } else {
+      console.error('An unexpected error occurred');
+    }
+    process.exit(1);
   }
-
-  const prompt = getPromptForMode(options.mode, diff);
-  const commitMessage = await generateCommitMessageWithSpinner(prompt);
-  console.log(commitMessage);
-
-  const confirmed = await confirmWithUser();
-  if (!confirmed) {
-    console.log(ERROR_MESSAGES.COMMIT_MESSAGE_NOT_COMMITTED);
-    return;
-  }
-
-  await executeCommitWithSpinner(commitMessage);
 }
 
 program
