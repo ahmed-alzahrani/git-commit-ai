@@ -4,13 +4,10 @@ export interface Mode {
   prompt: string; // Template with {{diff}} placeholder
 }
 
-
 export interface ModesConfig {
   modes: Record<string, Mode>;
 }
 
-
 export interface CliOptions {
   mode: string;
 }
-

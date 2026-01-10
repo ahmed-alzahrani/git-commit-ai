@@ -8,7 +8,10 @@ const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 // Paths
 export const PATHS = {
   MODES_CONFIG: path.join(__dirname, '../../config/modes.yaml'),
-  SERVICE_ACCOUNT_KEY: path.join(__dirname, '../../config/keys/committer-service-account-key.json'),
+  SERVICE_ACCOUNT_KEY: path.join(
+    __dirname,
+    '../../config/keys/committer-service-account-key.json'
+  ),
 } as const;
 
 // AI/Vertex AI Configuration
@@ -37,10 +40,13 @@ export const SPINNER_MESSAGES = {
 export const ERROR_MESSAGES = {
   NOT_A_GIT_REPO: 'Not a git repository',
   NO_STAGED_CHANGES: 'No staged changes',
-  MODE_NOT_FOUND: (modeId: string) => `Mode "${modeId}" not found in configuration`,
+  MODE_NOT_FOUND: (modeId: string) =>
+    `Mode "${modeId}" not found in configuration`,
   NO_COMMIT_MESSAGE_GENERATED: 'No commit message generated from AI response',
-  FAILED_TO_LOAD_MODES_CONFIG: (message: string) => `Failed to load modes config: ${message}`,
-  FAILED_TO_LOAD_MODES_CONFIG_UNKNOWN: 'Failed to load modes config: unknown error',
+  FAILED_TO_LOAD_MODES_CONFIG: (message: string) =>
+    `Failed to load modes config: ${message}`,
+  FAILED_TO_LOAD_MODES_CONFIG_UNKNOWN:
+    'Failed to load modes config: unknown error',
   INVALID_MODES_CONFIG: 'Invalid modes configuration: missing modes property',
   COMMIT_MESSAGE_NOT_COMMITTED: 'Commit message not committed',
 } as const;
@@ -57,9 +63,4 @@ export const APP_INFO = {
   DESCRIPTION: 'AI powered git commit message generator',
   VERSION: packageJson.version,
   DEFAULT_MODE: 'default',
-} as const;
-
-// Placeholder strings
-export const PLACEHOLDERS = {
-  DIFF: '{{diff}}',
 } as const;
