@@ -16,29 +16,35 @@ import {
 
 const program = new Command();
 
-async function run(options: CliOptions) {
-  console.log(CLI_MESSAGES.MODE_SELECTED(options.mode));
-
+async function validateGitState(): Promise<string | null> {
   if (!(await checkRepo())) {
     console.error(ERROR_MESSAGES.NOT_A_GIT_REPO);
-    return;
+    return null;
   }
 
-  let diff: string;
   try {
-    diff = await getDiff();
+    return await getDiff();
   } catch {
     console.error(ERROR_MESSAGES.NO_STAGED_CHANGES);
-    return;
+    return null;
   }
+}
 
-  const prompt = getPromptForMode(options.mode, diff);
-
+async function generateCommitMessageWithSpinner(
+  prompt: string
+): Promise<string> {
   const spinner = ora(SPINNER_MESSAGES.GENERATING_COMMIT_MESSAGE).start();
-  const commitMessage = await generateCommitMessage(prompt);
-  spinner.succeed(SPINNER_MESSAGES.SUCCESS_GENERATED);
-  console.log(commitMessage);
+  try {
+    const commitMessage = await generateCommitMessage(prompt);
+    spinner.succeed(SPINNER_MESSAGES.SUCCESS_GENERATED);
+    return commitMessage;
+  } catch (error) {
+    spinner.fail('Failed to generate commit message');
+    throw error;
+  }
+}
 
+async function confirmWithUser(): Promise<boolean> {
   const confirm = await inquirer.prompt([
     {
       type: 'confirm',
@@ -47,15 +53,39 @@ async function run(options: CliOptions) {
       default: true,
     },
   ]);
+  return confirm.confirm;
+}
 
-  if (!confirm.confirm) {
+async function executeCommitWithSpinner(message: string): Promise<void> {
+  const commitSpinner = ora(SPINNER_MESSAGES.COMMITTING).start();
+  try {
+    await commit(message);
+    commitSpinner.succeed(SPINNER_MESSAGES.SUCCESS_COMMITTED);
+  } catch (error) {
+    commitSpinner.fail('Failed to commit');
+    throw error;
+  }
+}
+
+async function run(options: CliOptions) {
+  console.log(CLI_MESSAGES.MODE_SELECTED(options.mode));
+
+  const diff = await validateGitState();
+  if (!diff) {
+    return;
+  }
+
+  const prompt = getPromptForMode(options.mode, diff);
+  const commitMessage = await generateCommitMessageWithSpinner(prompt);
+  console.log(commitMessage);
+
+  const confirmed = await confirmWithUser();
+  if (!confirmed) {
     console.log(ERROR_MESSAGES.COMMIT_MESSAGE_NOT_COMMITTED);
     return;
   }
 
-  const commitSpinner = ora(SPINNER_MESSAGES.COMMITTING).start();
-  await commit(commitMessage);
-  commitSpinner.succeed(SPINNER_MESSAGES.SUCCESS_COMMITTED);
+  await executeCommitWithSpinner(commitMessage);
 }
 
 program
