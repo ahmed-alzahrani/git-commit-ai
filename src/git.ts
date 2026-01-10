@@ -19,3 +19,7 @@ export async function getDiff() : Promise<string> {
       }
       return diff;
 }
+
+export async function commit(message: string) {
+    await simpleGit().commit(message);
+}
