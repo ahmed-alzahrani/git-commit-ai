@@ -1,22 +1,26 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { getMode, getPromptForMode } from "./config/modes";
+import { getPromptForMode } from "./config/modes";
 import { checkRepo, getDiff, commit } from "./git";
 import { CliOptions } from "./types";
 import { generateCommitMessage } from "./ai/generate";
 import ora from "ora";
 import inquirer from "inquirer";
+import { 
+    ERROR_MESSAGES, 
+    CLI_MESSAGES, 
+    SPINNER_MESSAGES, 
+    APP_INFO 
+} from "./config/constants";
 
 const program = new Command();
 
 async function run(options: CliOptions) {
-    console.log(`Mode selected: ${options.mode}`);
-
-    const mode = getMode(options.mode)
+    console.log(CLI_MESSAGES.MODE_SELECTED(options.mode));
 
     if (!await checkRepo()) {
-        console.error('Not a git repository');
+        console.error(ERROR_MESSAGES.NOT_A_GIT_REPO);
         return;
     }
 
@@ -24,39 +28,39 @@ async function run(options: CliOptions) {
     try {
         diff = await getDiff();
     } catch (error) {
-        console.error('No staged changes');
+        console.error(ERROR_MESSAGES.NO_STAGED_CHANGES);
         return;
     }
 
     const prompt = getPromptForMode(options.mode, diff);
 
-    const spinner = ora('Generating commit message...').start();
+    const spinner = ora(SPINNER_MESSAGES.GENERATING_COMMIT_MESSAGE).start();
     const commitMessage = await generateCommitMessage(prompt);
-    spinner.succeed('Commit message generated');
+    spinner.succeed(SPINNER_MESSAGES.SUCCESS_GENERATED);
     console.log(commitMessage);
 
     const confirm = await inquirer.prompt([{
         type: 'confirm',
         name: 'confirm',
-        message: 'Are you sure you want to commit with this message?',
+        message: CLI_MESSAGES.COMMIT_CONFIRMATION,
         default: true,
     }]);
 
     if (!confirm.confirm) {
-        console.log('Commit message not committed');
+        console.log(ERROR_MESSAGES.COMMIT_MESSAGE_NOT_COMMITTED);
         return;
     }
 
-    const commitSpinner = ora('Committing...').start();
+    const commitSpinner = ora(SPINNER_MESSAGES.COMMITTING).start();
     await commit(commitMessage);
-    commitSpinner.succeed('Committed');
+    commitSpinner.succeed(SPINNER_MESSAGES.SUCCESS_COMMITTED);
 }
 
 program
-    .name('committer')
-    .description('AI powered git commit message generator')
-    .version('1.0.0')
-    .option('-m, --mode <mode>', 'commit message mode', 'default')
+    .name(APP_INFO.NAME)
+    .description(APP_INFO.DESCRIPTION)
+    .version(APP_INFO.VERSION)
+    .option('-m, --mode <mode>', 'commit message mode', APP_INFO.DEFAULT_MODE)
     .action(run);
 
 program.parseAsync();

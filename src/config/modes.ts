@@ -1,26 +1,24 @@
 import * as fs from 'fs';
-import * as path from 'path';
 import * as yaml from 'js-yaml';
 import { ModesConfig, Mode } from '../types';
+import { PATHS, PLACEHOLDERS, ERROR_MESSAGES } from './constants';
 
 
 export function loadModesConfig(): ModesConfig {
-  const configPath = path.join(__dirname, '../../config/modes.yaml');
-  
   try {
-    const fileContents = fs.readFileSync(configPath, 'utf8');
+    const fileContents = fs.readFileSync(PATHS.MODES_CONFIG, 'utf8');
     const config = yaml.load(fileContents) as ModesConfig;
     
     if (!config || !config.modes) {
-      throw new Error('Invalid modes configuration: missing modes property');
+      throw new Error(ERROR_MESSAGES.INVALID_MODES_CONFIG);
     }
     
     return config;
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error(`Failed to load modes config: ${error.message}`);
+      throw new Error(ERROR_MESSAGES.FAILED_TO_LOAD_MODES_CONFIG(error.message));
     }
-    throw new Error('Failed to load modes config: unknown error');
+    throw new Error(ERROR_MESSAGES.FAILED_TO_LOAD_MODES_CONFIG_UNKNOWN);
   }
 }
 
@@ -29,7 +27,7 @@ export function getMode(modeId: string): Mode {
   const mode = config.modes[modeId];
   
   if (!mode) {
-    throw new Error(`Mode "${modeId}" not found in configuration`);
+    throw new Error(ERROR_MESSAGES.MODE_NOT_FOUND(modeId));
   }
   
   return mode;
