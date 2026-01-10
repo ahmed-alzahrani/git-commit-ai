@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { getPromptForMode } from './config/modes';
+import { getPromptForMode, getMode } from './config/modes';
 import { checkRepo, getDiff, commit } from './git';
 import { CliOptions } from './types';
 import { generateCommitMessage } from './ai/generate';
@@ -67,8 +67,21 @@ async function executeCommitWithSpinner(message: string): Promise<void> {
   }
 }
 
+function validateMode(modeId: string): void {
+  try {
+    getMode(modeId);
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(ERROR_MESSAGES.MODE_NOT_FOUND(modeId));
+    }
+    throw error;
+  }
+}
+
 async function run(options: CliOptions) {
   try {
+    // Validate mode early before any git operations
+    validateMode(options.mode);
     console.log(CLI_MESSAGES.MODE_SELECTED(options.mode));
 
     const diff = await validateGitState();
@@ -101,7 +114,24 @@ program
   .name(APP_INFO.NAME)
   .description(APP_INFO.DESCRIPTION)
   .version(APP_INFO.VERSION)
-  .option('-m, --mode <mode>', 'commit message mode', APP_INFO.DEFAULT_MODE)
+  .option(
+    '-m, --mode <mode>',
+    `commit message mode (default: ${APP_INFO.DEFAULT_MODE})`,
+    APP_INFO.DEFAULT_MODE
+  )
+  .addHelpText(
+    'after',
+    `
+Examples:
+  $ committer                    Generate commit message with default mode
+  $ committer --mode conventional  Use conventional commit format
+  $ committer -m yoda            Use Yoda-style commit messages
+
+Note:
+  Make sure you have staged changes (git add) before running this command.
+  The tool will prompt you to confirm before committing.
+    `
+  )
   .action(run);
 
 program.parseAsync();

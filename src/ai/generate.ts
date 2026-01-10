@@ -3,9 +3,29 @@ import { VertexAI } from '@google-cloud/vertexai';
 import { PATHS, AI_CONFIG, ERROR_MESSAGES } from '../config/constants';
 import { ServiceAccountCredentials } from '../types';
 
-const credentials = JSON.parse(
-  fs.readFileSync(PATHS.SERVICE_ACCOUNT_KEY, 'utf8')
-) as ServiceAccountCredentials;
+function loadCredentials(): ServiceAccountCredentials {
+  if (!fs.existsSync(PATHS.SERVICE_ACCOUNT_KEY)) {
+    throw new Error(ERROR_MESSAGES.SERVICE_ACCOUNT_KEY_NOT_FOUND(PATHS.SERVICE_ACCOUNT_KEY));
+  }
+
+  try {
+    const fileContents = fs.readFileSync(PATHS.SERVICE_ACCOUNT_KEY, 'utf8');
+    const credentials = JSON.parse(fileContents) as ServiceAccountCredentials;
+
+    if (!credentials.project_id || !credentials.private_key || !credentials.client_email) {
+      throw new Error(ERROR_MESSAGES.SERVICE_ACCOUNT_KEY_INVALID);
+    }
+
+    return credentials;
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('not found')) {
+      throw error;
+    }
+    throw new Error(ERROR_MESSAGES.SERVICE_ACCOUNT_KEY_INVALID);
+  }
+}
+
+const credentials = loadCredentials();
 
 const vertexAI = new VertexAI({
   project: credentials.project_id,

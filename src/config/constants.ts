@@ -54,6 +54,9 @@ export const ERROR_MESSAGES = {
     'Failed to load modes config: unknown error',
   INVALID_MODES_CONFIG: 'Invalid modes configuration: missing modes property',
   COMMIT_MESSAGE_NOT_COMMITTED: 'Commit message not committed',
+  SERVICE_ACCOUNT_KEY_NOT_FOUND: (path: string) =>
+    `Service account key not found at ${path}. Please ensure the file exists.`,
+  SERVICE_ACCOUNT_KEY_INVALID: 'Service account key file is invalid or corrupted',
 } as const;
 
 // CLI Messages
